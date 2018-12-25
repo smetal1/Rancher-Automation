@@ -1,0 +1,46 @@
+Version: v3
+clusters:
+  demo:
+    dockerRootDir: /var/lib/docker
+    enableNetworkPolicy: false
+    rancherKubernetesEngineConfig:
+      addonJobTimeout: 30
+      authentication:
+        strategy: x509
+      authorization: {}
+      bastionHost: {}
+      cloudProvider: {}
+      ignoreDockerVersion: true
+      ingress:
+        provider: nginx
+      kubernetesVersion: v1.11.5-rancher1-1
+      monitoring:
+        provider: metrics-server
+      network:
+        options:
+          flannel_backend_type: vxlan
+        plugin: canal
+      services:
+        etcd:
+          creation: 12h
+          extraArgs:
+            election-timeout: "5000"
+            heartbeat-interval: "500"
+          retention: 72h
+          snapshot: true
+        kubeApi:
+          serviceNodePortRange: 30000-32767
+        kubeController: {}
+        kubelet: {}
+        kubeproxy: {}
+        scheduler: {}
+nodePools:
+  demo:
+    clusterId: demo
+    controlPlane: true
+    etcd: true
+    hostnamePrefix: demo
+    nodeTemplateId: ertc-cust1
+    quantity: 3
+    worker: true
+

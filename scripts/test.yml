@@ -1,0 +1,14 @@
+Version: v3
+clusters:
+  ertc-customer2:
+    amazonElasticContainerServiceConfig:
+      accessKey: AKIAJF7AVOMF3HN2QOEA
+      associateWorkerNodePublicIp: true
+      instanceType: m3.medium
+      maximumNodes: 3
+      minimumNodes: 1
+      region: us-east-1
+      secretKey: KV5+6tvqNxJfh1pnE5uszSZ7g/+5nqBn8fdJ9Q2B
+    dockerRootDir: /var/lib/docker
+    enableNetworkPolicy: false
+
