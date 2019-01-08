@@ -2,14 +2,16 @@ var express = require('express');
 var router = express.Router();
 var shell=require('shelljs');
 var rancher="/home/ubuntu/Rancher-Dev/scripts/rancher";
-var file_line_reader=require('line-by-line')
+var file_line_reader=require('line-by-line');
 var sleep = require('sleep');
+var redis= require("../services/redis_services");
+
 /* GET home page. */
 router.post('/create', function(req, res) {
   //res.render('index', { title: 'Express' });
-
-  console.log(req.body.clientName)
+ 
   var clientName=req.body.clientName;
+  redis.redis_push(clientName);
   var filename="/home/ubuntu/Rancher-Dev/warbox/"+clientName+".yml";
   var command=rancher+" up --file "+filename
   action(clientName,filename,command)
@@ -31,49 +33,44 @@ router.post('/get-endpoints', function(req, res) {
 });
 
 router.post('/setup', function(req, res) {
-	var clientName=req.body.clientName;
-	var log_file=clientName+'.log'
+	//var clientName=req.body.clientName;
+	//var log_file=clientName+'.log'
+	var pending_client=[];
+	var current_client_list=redis.redis_lrage();
 	sleep.sleep(5);
-//        var command="echo '1' | "+rancher+ " context switch > "+log_file
-	var command=rancher +" cluster ls >"+log_file
-	var command_grep="grep -hnr "+clientName+"  "+log_file+" | grep 'Default'"
-	console.log(command)
-	sleep.sleep(3)
-        var sh=shell.exec(command);
-	sleep.sleep(2)
-	console.log(command_grep)
-	var shell_grep=shell.exec(command_grep)
-	sleep.sleep(5)
-	console.log(shell_grep.toString().split('         '))
-	var splitter_array=shell_grep.toString().split('         ');
-
-	var switch_index=splitter_array[0].split(':')[1]
-	installService(switch_index)
-	console.log(switch_index)
-	shell.rm(log_file)
-
-	//console.log(sh.includes("hello"))
-	//var lr=new file_line_reader(req.clientName+".log");
-        //lr.on('error',function(err){
-	//});
-	//	lr.on('line',function(line){
-	//		console.log(line+" :: "+line.includes(req.clientName));
-	//	});
-	//		lr.on('end',function(){
-	//		});
-       // console.log(sh);
-	if(shell_grep.toString().includes('provisioning')){
-	res.send(shell_grep.toString())
+	if(current_client_list){
+		current_client_list.forEach(function(clientName){
+			var log_file=clientName+'.log'
+			var command=rancher +" cluster ls >"+log_file
+			var command_grep="grep -hnr "+clientName+"  "+log_file+" | grep 'Default'"
+			//console.log(command)
+			sleep.sleep(3)
+				var sh=shell.exec(command);
+			sleep.sleep(2)
+			//console.log(command_grep)
+			var shell_grep=shell.exec(command_grep)
+			sleep.sleep(5)
+			//console.log(shell_grep.toString().split('         '))
+			var splitter_array=shell_grep.toString().split('         ');
+		
+			var switch_index=splitter_array[0].split(':')[1]
+			installService(switch_index)
+			//console.log(switch_index)
+			shell.rm(log_file)
+		
+			if(shell_grep.toString().includes('provisioning')){
+			pending_client.push(clientName);
+			}
+			else {
+			//res.send("Ready");
+				console.log("Ready"+clientName);
+				//call install Service Function
+			}
+		});
+		console.log(pending_client);
+		redis.redis_push(pending_client);
 	}
-	else {
-	res.send("Ready");
-	}
-        //if(sh.Reservations.length>0){
-        //res.send(sh.Reservations[0].Instances[0].PublicIpAddress);
-        //}
-        //else {
-          //      res.send("Waiting");
-        //}
+	
 
 });
 
