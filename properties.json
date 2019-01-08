@@ -1,5 +1,5 @@
 {
-    "REDIS_HOST":"127.0.0.1",
+    "REDIS_HOST":"34.204.92.69",
     "REDIS_PORT":"32768",
     "KEY": "client"
 }

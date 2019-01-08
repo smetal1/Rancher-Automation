@@ -37,40 +37,44 @@ router.post('/setup', function(req, res) {
 	//var log_file=clientName+'.log'
 	var pending_client=[];
 	var current_client_list=redis.redis_lrange();
-	sleep.sleep(5);
-	if(current_client_list){
-		current_client_list.forEach(function(clientName){
-			var log_file=clientName+'.log'
-			var command=rancher +" cluster ls >"+log_file
-			var command_grep="grep -hnr "+clientName+"  "+log_file+" | grep 'Default'"
-			//console.log(command)
-			sleep.sleep(3)
-				var sh=shell.exec(command);
-			sleep.sleep(2)
-			//console.log(command_grep)
-			var shell_grep=shell.exec(command_grep)
-			sleep.sleep(5)
-			//console.log(shell_grep.toString().split('         '))
-			var splitter_array=shell_grep.toString().split('         ');
+	red.redis_lrange(function(current_client_list){
+		if(current_client_list.length>0){
+			current_client_list.forEach(function(clientName){
+				var log_file=clientName+'.log'
+				var command=rancher +" cluster ls >"+log_file
+				var command_grep="grep -hnr "+clientName+"  "+log_file+" | grep 'Default'"
+				//console.log(command)
+				sleep.sleep(3)
+					var sh=shell.exec(command);
+				sleep.sleep(2)
+				//console.log(command_grep)
+				var shell_grep=shell.exec(command_grep)
+				sleep.sleep(5)
+				//console.log(shell_grep.toString().split('         '))
+				var splitter_array=shell_grep.toString().split('         ');
+			
+				var switch_index=splitter_array[0].split(':')[1]
+				installService(switch_index)
+				//console.log(switch_index)
+				shell.rm(log_file)
+			
+				if(shell_grep.toString().includes('provisioning')){
+	console.log(clientName)			
+	pending_client.push(clientName);
+				}
+				else {
+				//res.send("Ready");
+					console.log("Ready"+clientName);
+					//call install Service Function
+				}
+			});
+			console.log(pending_client);
+			redis.redis_push(pending_client);
+		}
 		
-			var switch_index=splitter_array[0].split(':')[1]
-			installService(switch_index)
-			//console.log(switch_index)
-			shell.rm(log_file)
-		
-			if(shell_grep.toString().includes('provisioning')){
-console.log(clientName)			
-pending_client.push(clientName);
-			}
-			else {
-			//res.send("Ready");
-				console.log("Ready"+clientName);
-				//call install Service Function
-			}
-		});
-		console.log(pending_client);
-		redis.redis_push(pending_client);
-	}
+
+	});
+	
 	
 
 });
