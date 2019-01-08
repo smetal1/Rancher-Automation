@@ -36,7 +36,7 @@ router.post('/setup', function(req, res) {
 	//var clientName=req.body.clientName;
 	//var log_file=clientName+'.log'
 	var pending_client=[];
-	var current_client_list=redis.redis_lrage();
+	var current_client_list=redis.redis_lrange();
 	sleep.sleep(5);
 	if(current_client_list){
 		current_client_list.forEach(function(clientName){
@@ -59,7 +59,8 @@ router.post('/setup', function(req, res) {
 			shell.rm(log_file)
 		
 			if(shell_grep.toString().includes('provisioning')){
-			pending_client.push(clientName);
+console.log(clientName)			
+pending_client.push(clientName);
 			}
 			else {
 			//res.send("Ready");

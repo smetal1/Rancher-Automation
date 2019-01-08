@@ -7,8 +7,8 @@
 6 silly lifecycle rancher-dev@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle rancher-dev@0.0.0~start: rancher-dev@0.0.0
 8 verbose lifecycle rancher-dev@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle rancher-dev@0.0.0~start: PATH: /usr/share/npm/bin/node-gyp-bin:/root/Rancher-Dev/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
-10 verbose lifecycle rancher-dev@0.0.0~start: CWD: /root/Rancher-Dev
+9 verbose lifecycle rancher-dev@0.0.0~start: PATH: /usr/share/npm/bin/node-gyp-bin:/home/ubuntu/Rancher-Dev/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+10 verbose lifecycle rancher-dev@0.0.0~start: CWD: /home/ubuntu/Rancher-Dev
 11 silly lifecycle rancher-dev@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle rancher-dev@0.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle rancher-dev@0.0.0~start: Failed to exec start script
@@ -23,7 +23,7 @@
 14 verbose stack     at maybeClose (internal/child_process.js:821:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 15 verbose pkgid rancher-dev@0.0.0
-16 verbose cwd /root/Rancher-Dev
+16 verbose cwd /home/ubuntu/Rancher-Dev
 17 error Linux 4.4.0-1072-aws
 18 error argv "/usr/bin/nodejs" "/usr/bin/npm" "start"
 19 error node v4.2.6
