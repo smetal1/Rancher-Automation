@@ -34,7 +34,8 @@ router.post('/setup', function(req, res) {
 	var clientName=req.body.clientName;
 	var log_file=clientName+'.log'
 	sleep.sleep(5);
-        var command="echo '1' | "+rancher+ " context switch > "+log_file
+//        var command="echo '1' | "+rancher+ " context switch > "+log_file
+	var command=rancher +" cluster ls >"+log_file
 	var command_grep="grep -hnr "+clientName+"  "+log_file+" | grep 'Default'"
 	console.log(command)
 	sleep.sleep(3)
@@ -61,7 +62,12 @@ router.post('/setup', function(req, res) {
 	//		lr.on('end',function(){
 	//		});
        // console.log(sh);
+	if(shell_grep.toString().includes('provisioning')){
 	res.send(shell_grep.toString())
+	}
+	else {
+	res.send("Ready");
+	}
         //if(sh.Reservations.length>0){
         //res.send(sh.Reservations[0].Instances[0].PublicIpAddress);
         //}

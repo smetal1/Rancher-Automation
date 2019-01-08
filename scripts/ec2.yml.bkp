@@ -13,7 +13,7 @@ clusters:
       ignoreDockerVersion: true
       ingress:
         provider: nginx
-      kubernetesVersion: v1.11.6-rancher1-1
+      kubernetesVersion: v1.11.5-rancher1-1
       monitoring:
         provider: metrics-server
       network:
@@ -40,7 +40,7 @@ nodePools:
     controlPlane: true
     etcd: true
     hostnamePrefix: demo
-    nodeTemplateId: test
+    nodeTemplateId: ertc-cust1
     quantity: 3
     worker: true
 
